@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
 project(netnet)
 
-add_executable(main "main.cpp" "networkvar.ixx" "networkvar.h" "player.ixx")
+add_executable(main "main.cpp" "networkvar.ixx" "networkvar.h" "player.ixx" "dirtyset.ixx")
 set_property(TARGET main PROPERTY CXX_STANDARD 20)
 
 # dependencies

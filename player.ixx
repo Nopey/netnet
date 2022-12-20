@@ -1,35 +1,31 @@
 module;
 
 #include <bitset>
+#include <unordered_set>
 
 #include "networkvar.h"
 
 export module player;
 
+import dirtyset;
+
 export struct Player
 {
-	enum class DirtyBit: size_t {
-		Position,
-		Count
-	};
-
-	typedef Player ThisClass;
-	// typedef BaseClass;
-	std::bitset<(size_t)DirtyBit::Count> dirty;
+	DirtySet dirtyset;
 
 	// these two lines could be combined into one C macro, but then intellisense can't find the field.
-	NetworkVar<ThisClass, (size_t)DirtyBit::Position, int> x = 0;
+	NetworkVar<int> x = 0;
 	NETWORKVAR_GETTERS( x );
-	NetworkVar<ThisClass, (size_t)DirtyBit::Position, int> y = 0;
+	NetworkVar<int> y = 0;
 	NETWORKVAR_GETTERS( y );
 
 	template <class Archive>
 	void serialize( Archive &ar )
 	{
 		// must deserialize dirty bit before networkvar fields.
-		ar( dirty );
+		ar( dirtyset );
 
-		x.maybe_serialize( ar, *this );
-		y.maybe_serialize( ar, *this );
+		NETWORKVAR_MAYBESERIALIZE( ar, x );
+		NETWORKVAR_MAYBESERIALIZE( ar, y );
 	}
 };

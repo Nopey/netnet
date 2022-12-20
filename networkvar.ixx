@@ -5,8 +5,8 @@ module;
 
 export module networkvar;
 
-// Tracks field modifications in a `dirty` bitset on the Parent class
-export template <typename Parent, size_t dirty_bit_index, typename T>
+// Reports field modifications in the Parent class's dirtyset
+export template <typename T>
 class NetworkVar
 {
 	T inner;
@@ -19,16 +19,17 @@ public:
 		return inner;
 	}
 
-	T &get( Parent &parent )
+	template<typename Parent>
+	T &_get_networkvar_raw( Parent &parent, size_t offset )
 	{
-		parent.dirty[dirty_bit_index] = true;
+		parent.dirtyset.mark( offset );
 		return inner;
 	}
 
-	template <class Archive>
-	void maybe_serialize( Archive &archive, Parent const &parent )
+	template <typename Archive, typename Parent>
+	void maybe_serialize( Archive &archive, Parent const &parent, size_t offset )
 	{
-		if ( parent.dirty[dirty_bit_index] )
+		if ( parent.dirtyset.is_dirty( offset ) )
 			archive( inner );
 	}
 };

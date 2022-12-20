@@ -1,5 +1,5 @@
 #include <cereal/archives/portable_binary.hpp>
-#include <cereal/types/bitset.hpp>
+#include <cereal/types/unordered_set.hpp>
 #include <sstream>
 #include <iostream>
 
@@ -14,7 +14,7 @@ int main()
 		Player server;
 
 		server.get_x() = 100; // need to use getter for mutations
-		server.dirty.reset(); // reset the dirty bit to prevent x from being sent
+		server.dirtyset.reset(); // reset the dirty bit to prevent x from being sent
 		server.get_y() = 200;
 
 		archive( server );
